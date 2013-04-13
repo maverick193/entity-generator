@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Maverick_Generator Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @version
+ * @category    Maverick
+ * @package     Maverick_Generator
+ * @author      Mohammed NAHHAS <m.nahhas@live.fr>
+ * @copyright   Copyright (c) 2013 Mohammed NAHHAS
+ * @licence     OSL - Open Software Licence 3.0
+ *
+ */
+-->
+
+<!--
+/**
+ * Adminhtml XML
+ */
+-->
+<config>
+    <menu>
+        <maverick>
+            <title>Maverick</title>
+            <sort_order>500</sort_order>
+            <children>
+                <generator translate="title" module="maverick_generator">
+                    <title>Entity Generator</title>
+                    <action>adminhtml/generator/</action>
+                    <sort_order>10</sort_order>
+                </generator>
+            </children>
+        </maverick>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <maverick translate="title" module="maverick_generator">
+                        <title>Maverick</title>
+                        <sort_order>500</sort_order>
+                        <children>
+                            <generator translate="title" module="maverick_generator">
+                                <title>Entity Generator</title>
+                                <sort_order>10</sort_order>
+                            </generator>
+                        </children>
+                    </maverick>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <generator translate="title" module="maverick_generator">
+                                        <title>Maverick Generator Section</title>
+                                    </generator>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

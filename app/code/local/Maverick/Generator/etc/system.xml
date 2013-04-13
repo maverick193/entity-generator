@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Maverick_Generator Extension
+*
+* NOTICE OF LICENSE
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*
+* @version
+* @category    Maverick
+* @package     Maverick_Generator
+* @author      Mohammed NAHHAS <m.nahhas@live.fr>
+* @copyright   Copyright (c) 2013 Mohammed NAHHAS
+* @licence     OSL - Open Software Licence 3.0
+*
+*/
+-->
+
+<!--
+/**
+ * System XML
+ */
+-->
+<config>
+    <!-- Create New Tab -->
+    <tabs>
+        <maverick>
+            <label>Maverick</label>
+            <sort_order>10</sort_order>
+        </maverick>
+    </tabs>
+    <sections>
+        <!-- Entity Generator Section -->
+        <generator translate="label" module="maverick_generator">
+            <label>Entity Generator</label>
+            <tab>maverick</tab>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <!-- Order Generator Configuration -->
+                <order translate="label" module="maverick_generator">
+                    <label>Order Generator Configuration</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <store_id translate="label">
+                            <label>Create Order In Store</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_store</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_id>
+                        <max_products translate="label">
+                            <label>Max Number of Products In Order</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-greater-than-zero</validate>
+                            <comment>This value should be lesser than 6</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_products>
+                        <checkmo_order_status>
+                            <label>Action For Order Paid with Check/Money Order</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>maverick_generator/source_config_order_status</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </checkmo_order_status>
+                        <banktransfer_order_status>
+                            <label>Action For Order Paid with Bank Transfer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>maverick_generator/source_config_order_status</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </banktransfer_order_status>
+                    </fields>
+                </order>
+                <!-- Customer Generator Configuration -->
+                <customer translate="label" module="maverick_generator">
+                    <label>Customer Generator Configuration</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <create_address translate="label">
+                            <label>Create Customer Address</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </create_address>
+                        <password translate="label">
+                            <label>Default Password For Customer</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-password required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password>
+                        <website_id translate="label">
+                            <label>Assign Customer To Website</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_website</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </website_id>
+                        <store_id translate="label">
+                            <label>Assign Customer To Store View</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_store</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_id>
+                        <group_id translate="label">
+                            <label>Assign Customer To Group</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_customer_group</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </group_id>
+                    </fields>
+                </customer>
+            </groups>
+        </generator>
+    </sections>
+</config>
