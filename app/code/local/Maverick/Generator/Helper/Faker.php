@@ -27,7 +27,7 @@
  * @see : http://github.com/fzaninotto/Faker
  */
 
-require_once dirname(__FILE__) . '/../../../../../../vendor/autoload.php';
+require_once Mage::getBaseDir() . '/vendor/autoload.php';
 
 class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
 {
