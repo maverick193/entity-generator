@@ -12,9 +12,11 @@ This Magento extension enables you to generate entities for tests :
 
 Requirements
 ============
-This extension uses the PHP library "Faker".
+- This extension uses the PHP library "Faker".
 
-@see : https://github.com/fzaninotto/Faker
+  @see : https://github.com/fzaninotto/Faker
+
+- This extension uses "Check" and "Bank Transfer" payment methods, please make sure those methods are enabled
 
 Compatibility
 =============
