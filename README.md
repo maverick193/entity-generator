@@ -65,7 +65,9 @@ When you generate an entity you can see the generation details in real time :
 
 Compatibility
 =============
-- Tested only on Magento >= 1.7
+Tested on Magento :
+- Community >= 1.7
+- Enterprise >= 1.12
 
 Support and Contribution
 ========================
