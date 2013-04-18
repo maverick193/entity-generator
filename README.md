@@ -18,6 +18,48 @@ Requirements
 
 - This extension uses "Check" and "Bank Transfer" payment methods, please make sure those methods are enabled
 
+Installation
+============
+1. First Install the PHP library FAKE :
+---------------------------------------
+* In your Magento root folder, dowload composer by running :
+```curl -sS https://getcomposer.org/installer | php```
+
+* Or, if you don't have curl : 
+```
+php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
+```
+* Or download it manually from : [Composer Website](http://getcomposer.org/download/)
+    
+      
+* Once it is downloaded, create (always in your root folder) a json file called composer.json and put in it the following content :
+
+```
+{
+    "require":{
+        "fzaninotto/faker" : "*"
+    }
+}
+```
+     
+     
+* Finally run : php composer.phar install
+  This will install the latest version of Faker library in a folder named "vendor" in your root directory and will also generate the autoloader automatically
+
+
+2. Install "Entity Generator" extension :
+-----------------------------------------
+
+* Install it with [modman](https://github.com/colinmollenhour/modman/wiki)
+* Or download and install it manually
+
+3. Refresh your magento cache : 
+-------------------------------
+Log in in your magento Backend and configure the extension
+
+When you generate an entity you can see the generation details in real time :
+``` tail -f var/log/maverick_generator.log ```
+
 Compatibility
 =============
 - Tested only on Magento >= 1.7
