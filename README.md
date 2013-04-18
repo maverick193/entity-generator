@@ -43,7 +43,10 @@ php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
 ```
      
      
-* Finally run : php composer.phar install
+* Finally run : 
+
+  ```php composer.phar install```
+  
   This will install the latest version of Faker library in a folder named "vendor" in your root directory and will also generate the autoloader automatically
 
 
