@@ -121,5 +121,5 @@ USAGE;
     }
 }
 
-$shell = new Mage_Shell_Compiler();
+$shell = new Mage_Shell_Generator();
 $shell->run();
