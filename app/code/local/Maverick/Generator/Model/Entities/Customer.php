@@ -111,4 +111,45 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
         }
         return false;
     }
+
+    /**
+     * Generate one Magento Entity For Shell Script
+     *
+     * @return array
+     */
+    public function createOneEntity()
+    {
+        $customer       = Mage::getModel('customer/customer');
+        $address        = Mage::getModel('customer/address');
+        $helper         = Mage::helper('maverick_generator');
+        $fakerHelper    = Mage::helper('maverick_generator/faker');
+
+        $customerData = $fakerHelper->generateCustomerData();
+        $i = 0;
+        $result = array();
+
+        while ($this->emailExists($customer, $customerData['email'])) {
+            $customerData['email'] .= $i + 1;
+        }
+
+        $customer->setData($customerData)->save();
+
+        // Log customer information
+        $result[] = $helper->__('* Customer "%s %s" was successfully created : (ID %s)',
+                        $customer->getFirstname(), $customer->getLastname(), $customer->getId()
+                    );
+
+
+        if (Mage::getStoreConfig('generator/customer/create_address') === '1') {
+
+            $address = $helper->createCustomerAddress($address, $customer, $fakerHelper);
+
+            // Log address information
+            $result[] = $helper->__('   - Address for this customer "%s" was successfully created : (Address ID %s)',
+                            $customer->getName(), $address->getId()
+                        );
+        }
+
+        return $result;
+    }
 }
