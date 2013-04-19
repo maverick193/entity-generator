@@ -83,6 +83,12 @@ php generator.php create --type customer --nbr 100
 php generator.php info
 ```
 
+* Show Help
+
+```
+php generator.php help
+```
+
 Compatibility
 =============
 Tested on Magento :
