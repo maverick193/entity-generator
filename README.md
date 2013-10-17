@@ -63,6 +63,32 @@ Log in in your magento Backend and configure the extension
 When you generate an entity you can see the generation details in real time :
 ``` tail -f var/log/maverick_generator.log ```
 
+Shell Command Line
+==================
+You can also create entities by using Shell Command Line
+
+Examples : 
+
+* Create 100 customers
+
+```
+cd /path/to/magento/
+cd shell/
+php generator.php create --type customer --nbr 100
+```
+
+* Display entities that can be created
+
+```
+php generator.php info
+```
+
+* Show Help
+
+```
+php generator.php help
+```
+
 Compatibility
 =============
 Tested on Magento :

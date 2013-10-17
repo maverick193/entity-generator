@@ -4,3 +4,4 @@ app/code/local/Maverick/Generator                   app/code/local/Maverick/Gene
 app/etc/modules/Maverick_Generator.xml              app/etc/modules/Maverick_Generator.xml
 app/design/adminhtml/default/default/layout/maverick/generator.xml  app/design/adminhtml/default/default/layout/maverick/generator.xml
 app/design/adminhtml/default/default/template/maverick/generator/container.phtml    app/design/adminhtml/default/default/template/maverick/generator/container.phtml
+shell/generator.php     shell/generator.php

@@ -28,6 +28,8 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
 {
     protected $_options;
 
+    protected $_shell_options;
+
     /**
      * Get options in "key-value" format
      *
@@ -57,5 +59,32 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
         }
 
         return $this->_options;
+    }
+
+    public function optionsForShell($class = false)
+    {
+        if (!$this->_shell_options) {
+            $options = array();
+
+            $entities   = Mage::app()->getConfig()->getNode('generator/entities');
+
+            foreach ($entities->children() as $entityCode => $entity) {
+                if (!$entity->label || !$entity->class) {
+                    continue;
+                }
+
+                if ($class) {
+                    $value = Mage::helper('maverick_generator')->__((string)$entity->class);
+                } else {
+                    $value = Mage::helper('maverick_generator')->__((string)$entity->label);
+                }
+
+                $options[(string)$entityCode] = $value;
+            }
+
+            $this->_shell_options = $options;
+        }
+
+        return $this->_shell_options;
     }
 }
