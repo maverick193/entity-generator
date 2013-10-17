@@ -68,7 +68,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <maverick_generator>Maverick_Generator_Adminhtml</maverick_generator>
+                        <maverick_generator before="Mage_Adminhtml">Maverick_Generator_Adminhtml</maverick_generator>
                     </modules>
                 </args>
             </adminhtml>
