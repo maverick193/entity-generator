@@ -16,7 +16,7 @@ Requirements
 
   @see : https://github.com/fzaninotto/Faker
 
-- This extension uses "Check" and "Bank Transfer" payment methods, please make sure those methods are enabled
+- **IMPORTANT !!! To create orders, this extension uses "Check", "Bank Transfer" as payment methods and "Flatrate" as shipping method, please make sure those methods are enabled**
 
 Installation
 ============
