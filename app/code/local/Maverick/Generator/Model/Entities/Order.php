@@ -51,7 +51,7 @@ class Maverick_Generator_Model_Entities_Order implements Maverick_Generator_Mode
         $shippingDescription = $helper->__('Shipping Method Used By Entity Generator');
 
         $result              = array(
-            'entity_type' => $this->getEntityTypeLabel(),
+            'entity_type' => $this->getEntityTypeCode(),
             'nbr'         => $nbrOfEntities
         );
 
@@ -169,13 +169,19 @@ class Maverick_Generator_Model_Entities_Order implements Maverick_Generator_Mode
     }
 
     /**
-     * Get Entity Type Label
+     * Get Entity Type Code
      *
      * @return string
      */
-    public function getEntityTypeLabel()
+    public function getEntityTypeCode()
     {
-        return Mage::helper('maverick_generator')->__('Sales Order');
+        $default = 'entities_order';
+        if ($config = Mage::app()->getConfig()->getNode('generator/entities/order')) {
+            if ($config->class) {
+                return (string)$config->class;
+            }
+        }
+        return $default;
     }
 
     /**

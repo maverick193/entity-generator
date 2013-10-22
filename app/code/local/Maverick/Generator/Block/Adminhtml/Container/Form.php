@@ -50,10 +50,10 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
         /** Entity Type Field **/
         $fieldset->addField('synchro_type', 'select', array(
             'name'      => 'synchro_type',
-            'values'    => Mage::getSingleton('maverick_generator/source_entity_type')->optionsForForm(true),
+            'values'    => Mage::getSingleton('maverick_generator/source_entity_type')->optionsForForm(),
             'required'  => true,
-            'label'     => Mage::helper('maverick_generator')->__('Synchronization Type'),
-            'title'     => Mage::helper('maverick_generator')->__('Synchronization Type'),
+            'label'     => Mage::helper('maverick_generator')->__('Entity Type'),
+            'title'     => Mage::helper('maverick_generator')->__('Entity Type'),
         ));
 
         $form->setUseContainer(true);

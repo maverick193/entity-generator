@@ -31,12 +31,11 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
     protected $_shell_options;
 
     /**
-     * Get options in "key-value" format
+     * Get options in "key-value" format for grid
      *
-     * @param bool $empty
      * @return array
      */
-    public function optionsForForm($empty = false)
+    public function optionForGrid()
     {
         if (!$this->_options) {
             $options = array();
@@ -51,14 +50,32 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
                 $options[(string)$entity->class] = Mage::helper('maverick_generator')->__((string)$entity->label);
             }
 
-            if ($empty) {
-                array_unshift($options, array('label' => Mage::helper('maverick_generator')->__('**-- Select Type --**'), 'value' => ''));
-            }
-
             $this->_options = $options;
         }
 
         return $this->_options;
+    }
+
+    /**
+     * Get options in "value", "label" format for form
+     *
+     * @return array
+     */
+    public function optionsForForm()
+    {
+        $options    = $this->optionForGrid();
+        $result     = array();
+
+        foreach ($options as $value => $label) {
+            $result[] = array('label' => $label, 'value' => $value);
+        }
+
+        array_unshift($result, array(
+            'label' => Mage::helper('maverick_generator')->__('-- Please Choose an Entity Type --'),
+            'value' => ''
+        ));
+
+        return $result;
     }
 
     public function optionsForShell($class = false)

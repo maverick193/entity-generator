@@ -35,11 +35,11 @@ interface Maverick_Generator_Model_Entities_Interface
     public function generateEntity($nbrOfEntities);
 
     /**
-     * Get Entity Type Label
+     * Get Entity Type Code
      *
      * @return string
      */
-    public function getEntityTypeLabel();
+    public function getEntityTypeCode();
 
     /**
      * Generate one Magento Entity For Shell Script

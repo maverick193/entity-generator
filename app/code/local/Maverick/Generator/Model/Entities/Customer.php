@@ -40,7 +40,7 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
         $fakerHelper    = Mage::helper('maverick_generator/faker');
 
         $result         = array(
-                            'entity_type' => $this->getEntityTypeLabel(),
+                            'entity_type' => $this->getEntityTypeCode(),
                             'nbr'         => $nbrOfEntities
                           );
 
@@ -78,13 +78,19 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
     }
 
     /**
-     * Get Entity Type Label
+     * Get Entity Type Code
      *
      * @return string
      */
-    public function getEntityTypeLabel()
+    public function getEntityTypeCode()
     {
-        return Mage::helper('maverick_generator')->__('Customer');
+        $default = 'entities_customer';
+        if ($config = Mage::app()->getConfig()->getNode('generator/entities/customer')) {
+            if ($config->class) {
+                return (string)$config->class;
+            }
+        }
+        return $default;
     }
 
     /**

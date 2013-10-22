@@ -66,7 +66,7 @@ class Maverick_Generator_Block_Adminhtml_Container_Grid extends Mage_Adminhtml_B
             'header' 	=> Mage::helper('maverick_generator')->__('Entity Type'),
             'index'  	=> 'entity_type',
             'type'   	=> 'options',
-            'options' 	=> Mage::getSingleton('maverick_generator/source_entity_type')->optionsForForm(),
+            'options' 	=> Mage::getSingleton('maverick_generator/source_entity_type')->optionForGrid(),
             'align'  	=> 'center',
         ));
 
