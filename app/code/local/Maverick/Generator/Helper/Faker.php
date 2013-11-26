@@ -46,6 +46,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
         $faker->addProvider(new Faker\Provider\fr_FR\Address($faker));
         $faker->addProvider(new Faker\Provider\fr_FR\PhoneNumber($faker));
         $faker->addProvider(new Faker\Provider\fr_FR\Company($faker));
+        $faker->addProvider(new Faker\Provider\Lorem($faker));
 
         $this->_country_id      = 'FR';
         $this->_regionResource  = Mage::getResourceModel('directory/region');
@@ -53,7 +54,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Get data needed to create customer entity
+     * Generate data needed to create customer entity
      *
      * @return array
      */
@@ -74,7 +75,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Get data needed to create customer address entity
+     * Generate data needed to create customer address entity
      *
      * @return array
      */
@@ -96,6 +97,26 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
             'is_default_billing'    => true,
             'is_default_shipping'   => true
         );
+    }
+
+    /**
+     * Generate data needed to create catalog category entity
+     *
+     * @return array
+     */
+    public function generateCategoryData()
+    {
+        $data = array(
+            'name'              => ucwords($this->_faker->words(rand(1, 2), true)),
+            'is_active'         => 1,
+            'available_sort_by' => 'position',
+            'default_sort_by'   => 'position',
+            'description'       => $this->_faker->text(255),
+            'is_anchor'         => 0,
+            'include_in_menu'   => 1,
+        );
+
+        return $data;
     }
 
     /**

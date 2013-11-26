@@ -30,9 +30,10 @@ interface Maverick_Generator_Model_Entities_Interface
      * Generate Magento Entity
      *
      * @param $nbrOfEntities
+     * @param $additional
      * @return array
      */
-    public function generateEntity($nbrOfEntities);
+    public function generateEntity($nbrOfEntities, $additional = array());
 
     /**
      * Get Entity Type Code
@@ -44,7 +45,8 @@ interface Maverick_Generator_Model_Entities_Interface
     /**
      * Generate one Magento Entity For Shell Script
      *
+     * @param array $data
      * @return array
      */
-    public function createOneEntity();
+    public function createOneEntity($data = array());
 }

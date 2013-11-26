@@ -31,9 +31,10 @@ class Maverick_Generator_Model_Entities_Order implements Maverick_Generator_Mode
      * Generate Magento Orders
      *
      * @param $nbrOfEntities
+     * @param array $additional
      * @return array
      */
-    public function generateEntity($nbrOfEntities)
+    public function generateEntity($nbrOfEntities, $additional = array())
     {
         /**
          * Init objects
@@ -365,9 +366,10 @@ class Maverick_Generator_Model_Entities_Order implements Maverick_Generator_Mode
     /**
      * Generate one Magento Entity For Shell Script
      *
+     * @param array $data
      * @return array
      */
-    public function createOneEntity()
+    public function createOneEntity($data = array())
     {
         /**
          * Init objects

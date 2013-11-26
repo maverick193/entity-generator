@@ -75,8 +75,8 @@ class Maverick_Generator_Adminhtml_GeneratorController extends Mage_Adminhtml_Co
                     Mage::throwException(Mage::helper('maverick_generator')->__('Cannot instanciate the entity type object'));
                 }
 
-                $result  = $creatorInstance->generateEntity($data['nbr']);
-                //$comment = (isset($data['comment'])) ? $data['comment'] : '';
+                $result  = $creatorInstance->generateEntity($data['nbr'], $data['additional']);
+
                 $endDateTime = Mage::getModel('core/date')->date();
 
                 $history = Mage::getModel('maverick_generator/history')->setData($result);
@@ -84,8 +84,14 @@ class Maverick_Generator_Adminhtml_GeneratorController extends Mage_Adminhtml_Co
                         ->setFinishedAt($endDateTime)
                         ->save();
 
+                $options    = Mage::getSingleton('maverick_generator/source_entity_type')->optionForGrid();
+                $type       = (isset($options[$history->getEntityType()])) ? $options[$history->getEntityType()] : $history->getEntityType();
+
+                // ᕦ(ò_ó*)ᕤ
+                $verb       = ($history->getNbr() > 1) ? Mage::helper('maverick_generator')->__('were') : Mage::helper('maverick_generator')->__('was');
+
                 $this->_getSession()->addSuccess(
-                    Mage::helper('maverick_generator')->__('%d "%s" was successfully created', $history->getNbr(), $history->getEntityType())
+                    Mage::helper('maverick_generator')->__('%d "%s" %s successfully created', $history->getNbr(), $type, $verb)
                 );
             } else {
                 Mage::throwException(Mage::helper('maverick_generator')->__('An error as been encountered while retrieving data'));
@@ -114,8 +120,15 @@ class Maverick_Generator_Adminhtml_GeneratorController extends Mage_Adminhtml_Co
                 return false;
             }
 
-            $nbrOfEntities  = (isset($data['nbr'])) ? (int)$data['nbr'] : 10;
-            $data['nbr']    = $nbrOfEntities;
+            $nbrOfEntities      = (isset($data['nbr'])) ? (int)$data['nbr'] : 10;
+            $data['nbr']        = $nbrOfEntities;
+            $data['additional'] = array();
+
+            foreach ($data as $index => $value) {
+                if (($index !== 'nbr') && ($index !== 'synchro_type') && ($index !== 'additional')) {
+                    $data['additional'][$index] = $value;
+                }
+            }
 
             return $data;
         }

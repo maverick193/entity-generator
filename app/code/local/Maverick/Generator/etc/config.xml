@@ -139,6 +139,10 @@
                 <label>Customer</label>
                 <class>entities_customer</class>
             </customer>
+            <category>
+                <label>Catalog Category</label>
+                <class>entities_catalog_category</class>
+            </category>
         </entities>
     </generator>
 </config>

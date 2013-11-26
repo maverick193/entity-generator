@@ -30,9 +30,10 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
      * Generate Magento customers
      *
      * @param $nbrOfEntities
+     * @param array $additional
      * @return array
      */
-    public function generateEntity($nbrOfEntities)
+    public function generateEntity($nbrOfEntities, $additional = array())
     {
         $customer       = Mage::getModel('customer/customer');
         $address        = Mage::getModel('customer/address');
@@ -121,9 +122,10 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
     /**
      * Generate one Magento Entity For Shell Script
      *
+     * @param array $data
      * @return array
      */
-    public function createOneEntity()
+    public function createOneEntity($data = array())
     {
         $customer       = Mage::getModel('customer/customer');
         $address        = Mage::getModel('customer/address');

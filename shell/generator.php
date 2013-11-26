@@ -76,8 +76,13 @@ class Mage_Shell_Generator extends Mage_Shell_Abstract
                     ));
                 }
 
+                $data = array();
+                if (($this->getArg('type') === 'category') && $this->getArg('parent')) {
+                    $data['parent_id'] = $this->getArg('parent');
+                }
+
                 for ($i=0; $i<$nbr; $i++) {
-                    $messages = $creatorInstance->createOneEntity();
+                    $messages = $creatorInstance->createOneEntity($data);
                     if (is_array($messages) && !empty($messages)) {
                         foreach ($messages as $message) {
                             echo $message . "\n";
