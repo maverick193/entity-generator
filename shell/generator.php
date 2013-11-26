@@ -103,8 +103,8 @@ class Mage_Shell_Generator extends Mage_Shell_Abstract
     public function usageHelp()
     {
         return <<<USAGE
-Usage:  php -f generator.php info
-        php -f generator.php create --type <entity_type> --nbr <a_number>
+Usage:  php generator.php info
+        php generator.php create --type <entity_type> --nbr <a_number>
 
 [options] :
 ===========
