@@ -92,6 +92,19 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
             $categoryData   = $fakerHelper->generateCategoryData();
+
+            if(isset($additional['category_products'])) {
+                $productIds = $this->_getRandomProductIds($this->_getStoreId());
+                if (!empty($productIds)) {
+                    $category->setPostedProducts($productIds);
+                }
+                else{
+                    $message = $helper->__('Unable to find a product entity to assign');
+                    $helper->log($message, Zend_Log::ERR);
+                    Mage::throwException($message);
+                }
+            }
+            
             foreach ($categoryData as $attribute => $value) {
                 $category->setData($attribute, $value);
             }
