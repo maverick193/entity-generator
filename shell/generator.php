@@ -136,7 +136,7 @@ Category entity :
 =================
 
 you can add specific settings (argument value must respect corresponding value of magento)
-  --page_layout
+  --page_layout <layout
   --is_active
   --available_sort_by
   --default_sort_by
@@ -146,6 +146,14 @@ you can add specific settings (argument value must respect corresponding value o
   --custom_use_parent_settings
   --custom_apply_to_products
   --custom_design
+
+the following settings don't need value
+  --available_sort_by_use_config
+  --default_sort_by_use_config
+  --filter_price_range
+
+Assign random product to the category(ies)
+  --assign_random_products
 
 USAGE;
     }

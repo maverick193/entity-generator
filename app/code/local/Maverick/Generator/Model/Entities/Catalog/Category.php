@@ -184,6 +184,13 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         $category->addData(array('path' => implode('/', $parentCategory->getPathIds())));
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
+        if(isset($categoryData['category_products'])) {
+            $products = array();
+            parse_str($categoryData['category_products'], $products);
+            $category->setPostedProducts($products);
+            unset($categoryData['category_products']);
+        }
+
         foreach ($categoryData as $attribute => $value) {
             $category->setData($attribute, $value);
         }
@@ -205,7 +212,8 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         // Log category information
         $result[] = $helper->__('* Category "%s" was successfully created : (ID %s) [Child of "%s"]',
             $category->getName(), $category->getId(), $parentCategory->getName()
-        );
+        )
+        .((isset($products))? $helper->__('- %d products has been assigned',count($products)):'');
 
         return $result;
     }
@@ -283,6 +291,8 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
     public function getAtrributesMerging($args = array(), $data = array())
     {
         $skeletorData = array(
+            'name'              => '',
+            'description'       => '',
             'is_active'         => '',
             'available_sort_by' => '',
             'default_sort_by'   => '',
@@ -292,6 +302,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             'custom_use_parent_settings'    => 0,
             'custom_apply_to_products'      => 0,
             'custom_design'     => '',
+            'use_config'        => '',
         );
 
         //fill empty entries with argument value
@@ -307,6 +318,37 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
                 Mage::throwException(Mage::helper('catalog')->__('Error while attribute merging, fakedata treatment'));
             }
         }
+        
+        if(isset($args['available_sort_by_use_config'])) {
+            $skeletorData['use_config'][] =  'available_sort_by';
+        }
+        
+        if(isset($args['default_sort_by_use_config'])) {
+            $skeletorData['use_config'][] =  'default_sort_by';
+        }
+
+        if(isset($args['filter_price_range'])) {
+            $skeletorData['use_config'][] =  'filter_price_range';
+        }
+
+        /*
+        * if assign_random_product exists,
+        * random products will be assigned to the category
+        */
+        $helper = Mage::helper('maverick_generator');
+        $storeId = Mage::getStoreConfig('generator/order/store_id');
+
+        if(isset($args['assign_random_products'])){
+            $productIds = $this->_getRandomProductIds($storeId);
+            if (!empty($productIds)) {
+                $skeletorData['category_products'] = implode('=&', $productIds);
+            }
+            else{
+                $message = $helper->__('Unable to find a product entity to assign');
+                $helper->log($message, Zend_Log::ERR);
+                Mage::throwException($message);
+            }
+        }
         return $skeletorData;
     }
 
@@ -314,5 +356,31 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
     {
         if(strlen($data) == 0 && isset($fakedata[$index]))
             $data = $fakedata[$index];
+    }
+
+    /**
+     * Get Product Ids to purchase
+     * Product must be simple, enabled, visible and in stock
+     *
+     * @param $storeId
+     * @return array
+     */
+    protected function _getRandomProductIds($storeId)
+    {
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addStoreFilter($storeId)
+            ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+            ->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
+            ->addAttributeToFilter('visibility',array('in' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH));
+
+        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($collection);
+
+        $collection->getSelect()
+            ->limit(rand(1, 100))
+            ->order('RAND()');
+
+        $ids = $collection->getConnection()->fetchCol($collection->getSelect());
+
+        return $ids;
     }
 }
