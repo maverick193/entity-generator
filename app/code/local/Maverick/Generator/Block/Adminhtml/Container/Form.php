@@ -85,6 +85,8 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
         $assignProduct = $fieldset->addField('assign_random_products', 'checkbox', array(
             'name'      => 'assign_random_products',
             'required'  => false,
+            'checked' => false,
+            'value'  => '1',
             'label'     => Mage::helper('maverick_generator')->__('Assign random product'),
             'title'     => Mage::helper('maverick_generator')->__('Assign random product'),
             'note'      => Mage::helper('maverick_generator')->__('Random product will be assigned to the category')

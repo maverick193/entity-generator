@@ -93,9 +93,12 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
 
             $categoryData   = $fakerHelper->generateCategoryData();
 
-            if(isset($additional['category_products'])) {
+            if(isset($additional['assign_random_products'])) {
                 $productIds = $this->_getRandomProductIds($this->_getStoreId());
+                $productIdsStr = implode('&=', $productIds);                
                 if (!empty($productIds)) {
+                    $products = array();
+                    parse_str($productIdsStr, $products);
                     $category->setPostedProducts($productIds);
                 }
                 else{
