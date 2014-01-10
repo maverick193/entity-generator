@@ -316,7 +316,6 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             'custom_use_parent_settings'    => 0,
             'custom_apply_to_products'      => 0,
             'custom_design'     => '',
-            'use_config'        => '',
         );
 
         //fill empty entries with argument value
@@ -331,18 +330,6 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             if (!array_walk($skeletorData, array($this, 'merge'), $data)) {
                 Mage::throwException(Mage::helper('catalog')->__('Error while attribute merging, fakedata treatment'));
             }
-        }
-        
-        if(isset($args['available_sort_by_use_config'])) {
-            $skeletorData['use_config'][] =  'available_sort_by';
-        }
-        
-        if(isset($args['default_sort_by_use_config'])) {
-            $skeletorData['use_config'][] =  'default_sort_by';
-        }
-
-        if(isset($args['filter_price_range'])) {
-            $skeletorData['use_config'][] =  'filter_price_range';
         }
 
         /*
