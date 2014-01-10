@@ -94,12 +94,11 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             $categoryData   = $fakerHelper->generateCategoryData();
 
             if(isset($additional['assign_random_products'])) {
-                $productIds = $this->_getRandomProductIds($this->_getStoreId());
-                $productIdsStr = implode('&=', $productIds);                
+                $productIds = $this->_getRandomProductIds($this->_getStoreId());              
                 if (!empty($productIds)) {
-                    $products = array();
-                    parse_str($productIdsStr, $products);
-                    $category->setPostedProducts($productIds);
+                    $productData = array_flip($productIds);
+                    $productData = array_map(function(){$v = '';},$productData);
+                    $category->setPostedProducts($productData);
                 }
                 else{
                     $message = $helper->__('Unable to find a product entity to assign');
@@ -201,9 +200,8 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
         if(isset($categoryData['category_products'])) {
-            $products = array();
-            parse_str($categoryData['category_products'], $products);
-            $category->setPostedProducts($products);
+            print_r($categoryData['category_products']);
+            $category->setPostedProducts($categoryData['category_products']);
             unset($categoryData['category_products']);
         }
 
@@ -357,7 +355,9 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         if(isset($args['assign_random_products'])){
             $productIds = $this->_getRandomProductIds($storeId);
             if (!empty($productIds)) {
-                $skeletorData['category_products'] = implode('=&', $productIds);
+                $productData = array_flip($productIds);
+                $productData = array_map(function(){$v = '';},$productData);
+                $skeletorData['category_products'] = $productData;
             }
             else{
                 $message = $helper->__('Unable to find a product entity to assign');
