@@ -1,12 +1,12 @@
 {
-    "name":"maverick/generator",
+    "name":"maverick/entity-generator",
     "license":"OSL-3.0",
     "type":"magento-module",
     "homepage":"https://github.com/maverick193/entity-generator.git",
     "description":"Magento extension to generate test entities (customers, addresses, orders) with fake data",
     "require":{
         "magento-hackathon/magento-composer-installer": "*",
-        "fzaninotto/faker" : "*"
+        "maverick193/Faker" : "*"
     },
     "authors":[
         {
