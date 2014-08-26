@@ -77,8 +77,11 @@ class Mage_Shell_Generator extends Mage_Shell_Abstract
                 }
 
                 $data = array();
-                if (($this->getArg('type') === 'category') && $this->getArg('parent')) {
-                    $data['parent_id'] = $this->getArg('parent');
+                if ($this->getArg('type') === 'category') {
+                    $data = $this->getAllArgs();
+                    if($this->getArg('parent')) {
+                        $data['parent_id'] = $this->getArg('parent');
+                    }
                 }
 
                 for ($i=0; $i<$nbr; $i++) {
@@ -102,6 +105,14 @@ class Mage_Shell_Generator extends Mage_Shell_Abstract
     }
 
     /**
+     * Retrieve All Args
+     *
+     */
+    public function getAllArgs() {
+        return $this->_args;
+    }
+
+    /**
      * Retrieve Usage Help Message
      *
      */
@@ -121,6 +132,23 @@ Usage:  php generator.php info
 
 example : php generator.php create --type customer --nbr 100
 
+Category entity :
+=================
+
+you can add specific settings (argument value must respect corresponding value of magento)
+  --page_layout <layout
+  --is_active
+  --available_sort_by
+  --default_sort_by
+  --is_anchor
+  --include_in_menu
+  --page_layout
+  --custom_use_parent_settings
+  --custom_apply_to_products
+  --custom_design
+
+Assign random product to the category(ies)
+  --assign_random_products
 
 USAGE;
     }

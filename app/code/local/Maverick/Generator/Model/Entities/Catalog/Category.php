@@ -92,6 +92,21 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
             $categoryData   = $fakerHelper->generateCategoryData();
+
+            if(isset($additional['assign_random_products'])) {
+                $productIds = $this->_getRandomProductIds($this->_getStoreId());              
+                if (!empty($productIds)) {
+                    $productData = array_flip($productIds);
+                    $productData = array_map(function(){$v = '';},$productData);
+                    $category->setPostedProducts($productData);
+                }
+                else{
+                    $message = $helper->__('Unable to find a product entity to assign');
+                    $helper->log($message, Zend_Log::ERR);
+                    Mage::throwException($message);
+                }
+            }
+            
             foreach ($categoryData as $attribute => $value) {
                 $category->setData($attribute, $value);
             }
@@ -175,6 +190,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
 
         $fakerHelper    = Mage::helper('maverick_generator/faker');
         $categoryData   = $fakerHelper->generateCategoryData();
+        $categoryData = $this->getAtrributesMerging($data, $categoryData);
         $result         = array();
 
         /** @var $category Mage_Catalog_Model_Category */
@@ -182,6 +198,12 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
 
         $category->addData(array('path' => implode('/', $parentCategory->getPathIds())));
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
+
+        if(isset($categoryData['category_products'])) {
+            print_r($categoryData['category_products']);
+            $category->setPostedProducts($categoryData['category_products']);
+            unset($categoryData['category_products']);
+        }
 
         foreach ($categoryData as $attribute => $value) {
             $category->setData($attribute, $value);
@@ -204,7 +226,8 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         // Log category information
         $result[] = $helper->__('* Category "%s" was successfully created : (ID %s) [Child of "%s"]',
             $category->getName(), $category->getId(), $parentCategory->getName()
-        );
+        )
+        .((isset($products))? $helper->__('- %d products has been assigned',count($products)):'');
 
         return $result;
     }
@@ -272,5 +295,95 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         }
 
         return $ids[array_rand($ids, 1)];
+    }
+
+    /**
+     * Merge Arguments Data and Fake Data generated to empty skeletor Data
+     *
+     * @return array
+     */
+    public function getAtrributesMerging($args = array(), $data = array())
+    {
+        $skeletorData = array(
+            'name'              => '',
+            'description'       => '',
+            'is_active'         => '',
+            'available_sort_by' => '',
+            'default_sort_by'   => '',
+            'is_anchor'         => 0,
+            'include_in_menu'   => 1,
+            'page_layout'       => '',
+            'custom_use_parent_settings'    => 0,
+            'custom_apply_to_products'      => 0,
+            'custom_design'     => '',
+        );
+
+        //fill empty entries with argument value
+        if(!empty($args)){
+            if (!array_walk($skeletorData, array($this, 'merge'), $args)) {
+                Mage::throwException(Mage::helper('catalog')->__('Error while attribute merging, args treatment'));
+            }
+        }
+
+        //fill empty entries with fake value
+        if(!empty($data)){
+            if (!array_walk($skeletorData, array($this, 'merge'), $data)) {
+                Mage::throwException(Mage::helper('catalog')->__('Error while attribute merging, fakedata treatment'));
+            }
+        }
+
+        /*
+        * if assign_random_product exists,
+        * random products will be assigned to the category
+        */
+        $helper = Mage::helper('maverick_generator');
+        $storeId = Mage::getStoreConfig('generator/order/store_id');
+
+        if(isset($args['assign_random_products'])){
+            $productIds = $this->_getRandomProductIds($storeId);
+            if (!empty($productIds)) {
+                $productData = array_flip($productIds);
+                $productData = array_map(function(){$v = '';},$productData);
+                $skeletorData['category_products'] = $productData;
+            }
+            else{
+                $message = $helper->__('Unable to find a product entity to assign');
+                $helper->log($message, Zend_Log::ERR);
+                Mage::throwException($message);
+            }
+        }
+        return $skeletorData;
+    }
+
+    public function merge(&$data, $index, $fakedata)
+    {
+        if(strlen($data) == 0 && isset($fakedata[$index]))
+            $data = $fakedata[$index];
+    }
+
+    /**
+     * Get Product Ids to purchase
+     * Product must be simple, enabled, visible and in stock
+     *
+     * @param $storeId
+     * @return array
+     */
+    protected function _getRandomProductIds($storeId)
+    {
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addStoreFilter($storeId)
+            ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+            ->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
+            ->addAttributeToFilter('visibility',array('in' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH));
+
+        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($collection);
+
+        $collection->getSelect()
+            ->limit(rand(1, 100))
+            ->order('RAND()');
+
+        $ids = $collection->getConnection()->fetchCol($collection->getSelect());
+
+        return $ids;
     }
 }

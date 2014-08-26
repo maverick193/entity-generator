@@ -20,7 +20,7 @@
  * @licence     OSL - Open Software Licence 3.0
  *
  */
- 
+
 /**
  * Form Block
  */
@@ -49,35 +49,47 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
 
         /** Entity Type Field **/
         $synchroType = $fieldset->addField('synchro_type', 'select', array(
-                            'name'      => 'synchro_type',
-                            'values'    => Mage::getSingleton('maverick_generator/source_entity_type')->optionsForForm(),
-                            'required'  => true,
-                            'label'     => Mage::helper('maverick_generator')->__('Entity Type'),
-                            'title'     => Mage::helper('maverick_generator')->__('Entity Type'),
+            'name'      => 'synchro_type',
+            'values'    => Mage::getSingleton('maverick_generator/source_entity_type')->optionsForForm(),
+            'required'  => true,
+            'label'     => Mage::helper('maverick_generator')->__('Entity Type'),
+            'title'     => Mage::helper('maverick_generator')->__('Entity Type'),
         ));
 
         /** @var  $parentCategory */
         /** Category Parent Type */
         $parentCategory = $fieldset->addField('category_parent', 'select', array(
-                            'name'      => 'category_parent',
-                            'required'  => true,
-                            'label'     => Mage::helper('maverick_generator')->__('Category Parent'),
-                            'title'     => Mage::helper('maverick_generator')->__('Category Parent'),
-                            'values'    => array(
-                                            array('label' => Mage::helper('maverick_generator')->__('Random'),           'value' => 'random'),
-                                            array('label' => Mage::helper('maverick_generator')->__('Configured Value'), 'value' => 'configured'),
-                                            array('label' => Mage::helper('maverick_generator')->__('Specific Value'),   'value' => 'fixed'),
-                            ),
+            'name'      => 'category_parent',
+            'required'  => true,
+            'label'     => Mage::helper('maverick_generator')->__('Category Parent'),
+            'title'     => Mage::helper('maverick_generator')->__('Category Parent'),
+            'values'    => array(
+                array('label' => Mage::helper('maverick_generator')->__('Random'),           'value' => 'random'),
+                array('label' => Mage::helper('maverick_generator')->__('Configured Value'), 'value' => 'configured'),
+                array('label' => Mage::helper('maverick_generator')->__('Specific Value'),   'value' => 'fixed'),
+            ),
         ));
 
         /** @var  $parentId */
         /** Specific Category Parent ID */
         $parentId = $fieldset->addField('category_parent_id', 'text', array(
-                        'name'      => 'category_parent_id',
-                        'required'  => true,
-                        'label'     => Mage::helper('maverick_generator')->__('Category Parent ID'),
-                        'title'     => Mage::helper('maverick_generator')->__('Category Parent ID'),
-                        'note'      => Mage::helper('maverick_generator')->__('The created categories will be children of this parent.  If no ID is specified, categories will be under the root category')
+            'name'      => 'category_parent_id',
+            'required'  => true,
+            'label'     => Mage::helper('maverick_generator')->__('Category Parent ID'),
+            'title'     => Mage::helper('maverick_generator')->__('Category Parent ID'),
+            'note'      => Mage::helper('maverick_generator')->__('The created categories will be children of this parent.  If no ID is specified, categories will be under the root category')
+        ));
+
+        /** @var  $assignProduct */
+        /** Assign random product to the category */
+        $assignProduct = $fieldset->addField('assign_random_products', 'checkbox', array(
+            'name'      => 'assign_random_products',
+            'required'  => false,
+            'checked' => false,
+            'value'  => '1',
+            'label'     => Mage::helper('maverick_generator')->__('Assign random product'),
+            'title'     => Mage::helper('maverick_generator')->__('Assign random product'),
+            'note'      => Mage::helper('maverick_generator')->__('Random product will be assigned to the category')
         ));
 
         $form->setUseContainer(true);
@@ -85,11 +97,13 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
 
         /** Field Dependency Management */
         $this->setChild('form_after', $this->getLayout()->createBlock('adminhtml/widget_form_element_dependence')
-             ->addFieldMap($synchroType->getHtmlId(), $synchroType->getName())
-             ->addFieldMap($parentCategory->getHtmlId(), $parentCategory->getName())
-             ->addFieldMap($parentId->getHtmlId(), $parentId->getName())
-             ->addFieldDependence($parentCategory->getName(), $synchroType->getName(), 'entities_catalog_category')
-             ->addFieldDependence($parentId->getName(), $parentCategory->getName(), 'fixed')
+                ->addFieldMap($synchroType->getHtmlId(), $synchroType->getName())
+                ->addFieldMap($parentCategory->getHtmlId(), $parentCategory->getName())
+                ->addFieldMap($parentId->getHtmlId(), $parentId->getName())
+                ->addFieldMap($assignProduct->getHtmlId(), $assignProduct->getName())
+                ->addFieldDependence($parentCategory->getName(), $synchroType->getName(), 'entities_catalog_category')
+                ->addFieldDependence($assignProduct->getName(), $synchroType->getName(), 'entities_catalog_category')
+                ->addFieldDependence($parentId->getName(), $parentCategory->getName(), 'fixed')
         );
 
         return parent::_prepareForm();
