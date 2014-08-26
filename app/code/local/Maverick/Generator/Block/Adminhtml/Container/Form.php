@@ -47,6 +47,15 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
             'note'      => Mage::helper('maverick_generator')->__('Number of entities to create, default is 10')
         ));
 
+        /** Language Field **/
+        $fieldset->addField('locale', 'select', array(
+            'name'      => 'locale',
+            'values'    => Mage::getSingleton('maverick_generator/source_entity_locale')->optionsForForm(),
+            'required'  => true,
+            'label'     => Mage::helper('maverick_generator')->__('Choose Language'),
+            'title'     => Mage::helper('maverick_generator')->__('Choose Language'),
+        ));
+
         /** Entity Type Field **/
         $synchroType = $fieldset->addField('synchro_type', 'select', array(
                             'name'      => 'synchro_type',

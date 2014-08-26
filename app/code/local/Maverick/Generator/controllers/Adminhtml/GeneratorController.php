@@ -68,18 +68,17 @@ class Maverick_Generator_Adminhtml_GeneratorController extends Mage_Adminhtml_Co
     {
         try {
             if ($data = $this->_initParams()) {
-                $startDateTime = Mage::getModel('core/date')->date();
-                $creatorInstance = Mage::getModel('maverick_generator/' . $data['synchro_type']);
+                $startDateTime      = Mage::getModel('core/date')->date();
+                $creatorInstance    = Mage::getModel('maverick_generator/' . $data['synchro_type']);
 
                 if (!is_object($creatorInstance)) {
                     Mage::throwException(Mage::helper('maverick_generator')->__('Cannot instanciate the entity type object'));
                 }
 
-                $result  = $creatorInstance->generateEntity($data['nbr'], $data['additional']);
+                $result         = $creatorInstance->generateEntity($data['nbr'], $data['additional']);
+                $endDateTime    = Mage::getModel('core/date')->date();
 
-                $endDateTime = Mage::getModel('core/date')->date();
-
-                $history = Mage::getModel('maverick_generator/history')->setData($result);
+                $history        = Mage::getModel('maverick_generator/history')->setData($result);
                 $history->setStartedAt($startDateTime)
                         ->setFinishedAt($endDateTime)
                         ->save();
@@ -128,6 +127,11 @@ class Maverick_Generator_Adminhtml_GeneratorController extends Mage_Adminhtml_Co
                 if (($index !== 'nbr') && ($index !== 'synchro_type') && ($index !== 'additional')) {
                     $data['additional'][$index] = $value;
                 }
+            }
+
+            /* Set Faker locale in the register */
+            if (isset($data['locale'])) {
+                Mage::register('faker_locale', $data['locale']);
             }
 
             return $data;

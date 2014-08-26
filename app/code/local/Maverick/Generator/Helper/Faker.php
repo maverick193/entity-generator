@@ -27,28 +27,43 @@
  * @see : http://github.com/fzaninotto/Faker
  */
 
-require_once Mage::getBaseDir() . '/vendor/autoload.php';
+require_once(dirname(__FILE__) . '/../../../../../../../../autoload.php');
 
 class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
 {
     protected $_faker;
     protected $_country_id;
     protected $_regionResource;
+    protected $_locale;
 
     /**
      * Init Faker Generator and Providers
      */
     public function __construct()
     {
-        $faker = new Faker\Generator();
-        $faker->addProvider(new Faker\Provider\fr_FR\Person($faker));
-        $faker->addProvider(new Faker\Provider\fr_FR\Internet($faker));
-        $faker->addProvider(new Faker\Provider\fr_FR\Address($faker));
-        $faker->addProvider(new Faker\Provider\fr_FR\PhoneNumber($faker));
-        $faker->addProvider(new Faker\Provider\fr_FR\Company($faker));
+        $this->_locale = Mage::registry('faker_locale') ?
+            Mage::registry('faker_locale') :
+            Maverick_Generator_Helper_Data::DEFAULT_LOCALE_FAKER;
+
+        $faker      = new Faker\Generator();
+        $providers  = array('Person', 'Address', 'PhoneNumber', 'Company');
+
+        foreach ($providers as $provider) {
+            $class = 'Faker\Provider\\' . $this->_locale . '\\' . $provider;
+            $faker->addProvider(new $class($faker));
+        }
+
+        /* Internet provider */
+        $class = 'Faker\Provider\\' . $this->_locale . '\Internet';
+        if (class_exists($class, false)) {
+            $faker->addProvider(new $class($faker));
+        } else {
+            $faker->addProvider(new Faker\Provider\Internet($faker));
+        }
+
+        /* Lorem Ipsum provider */
         $faker->addProvider(new Faker\Provider\Lorem($faker));
 
-        $this->_country_id      = 'FR';
         $this->_regionResource  = Mage::getResourceModel('directory/region');
         $this->_faker           = $faker;
     }
@@ -85,7 +100,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
 
         return array(
             'city'                  => $this->_faker->city,
-            'country_id'            => 'FR',
+            'country_id'            => $this->_getCountryId(),
             'postcode'              => str_replace(' ', '', $this->_faker->postcode),
             'region'                => $regionData['default_name'],
             'region_id'             => $regionData['region_id'],
@@ -120,6 +135,16 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Set Faker locale
+     *
+     * @param $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->_locale = $locale;
+    }
+
+    /**
      * Fetch a random region_id and region_name value
      *
      * @return array
@@ -127,14 +152,13 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     protected function _getRandomRegionData()
     {
         $adapter        = $this->_regionResource->getReadConnection();
-
         $select         = $adapter->select()
                                   ->from($this->_regionResource->getTable('directory/country_region'))
                                   ->where('country_id = :country_id')
                                   ->order('RAND()')
                                   ->limit(1);
 
-        $data = $adapter->fetchRow($select, array('country_id' => $this->_country_id));
+        $data = $adapter->fetchRow($select, array('country_id' => $this->_getCountryId()));
         if (empty($data)) {
             return array(
                 'region_id'     => $this->_faker->region,
@@ -143,5 +167,21 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
         }
 
         return $data;
+    }
+
+    /**
+     * Return configured country ID
+     *
+     * @return Mage_Core_Model_Config_Element
+     */
+    protected function _getCountryId()
+    {
+        if (!$this->_country_id) {
+            $countryId = Mage::app()->getConfig()->getNode('generator/locale/' . $this->_locale . '/country_id');
+
+            $this->_country_id =  $countryId ? (string)$countryId : Maverick_Generator_Helper_Data::DEFAULT_COUNTRY_ID;
+        }
+
+        return $this->_country_id;
     }
 }

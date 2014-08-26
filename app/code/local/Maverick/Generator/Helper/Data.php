@@ -54,6 +54,11 @@ class Maverick_Generator_Helper_Data extends Mage_Core_Helper_Abstract
     const DEFAULT_LOCALE_FAKER = 'fr_FR';
 
     /**
+     * Default country ID
+     */
+    const DEFAULT_COUNTRY_ID = 'FR';
+
+    /**
      * Log messages in custom log file
      *
      * @param $message

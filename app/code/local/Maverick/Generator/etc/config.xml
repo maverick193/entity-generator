@@ -144,5 +144,15 @@
                 <class>entities_catalog_category</class>
             </category>
         </entities>
+        <locale>
+            <fr_FR>
+                <label>Français (France)</label>
+                <country_id>FR</country_id>
+            </fr_FR>
+            <en_US>
+                <label>English (USA)</label>
+                <country_id>US</country_id>
+            </en_US>
+        </locale>
     </generator>
 </config>
