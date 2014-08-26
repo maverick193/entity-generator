@@ -143,7 +143,7 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
         $customer->setData($customerData)->save();
 
         // Log customer information
-        $result[] = $helper->__('* Customer "%s %s" was successfully created : (ID %s)',
+        $result[] = $helper->__('Customer "%s %s" was successfully created : (ID %s)',
                         $customer->getFirstname(), $customer->getLastname(), $customer->getId()
                     );
 
@@ -153,7 +153,7 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
             $address = $helper->createCustomerAddress($address, $customer, $fakerHelper);
 
             // Log address information
-            $result[] = $helper->__('   - Address for this customer "%s" was successfully created : (Address ID %s)',
+            $result[] = $helper->__('    - Address for this customer "%s" was successfully created : (Address ID %s)',
                             $customer->getName(), $address->getId()
                         );
         }

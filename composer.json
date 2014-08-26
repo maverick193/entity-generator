@@ -6,6 +6,7 @@
     "description":"Magento extension to generate test entities (customers, addresses, orders) with fake data",
     "require":{
         "magento-hackathon/magento-composer-installer": "*",
+        "symfony/console": "*",
         "fzaninotto/faker" : "*"
     },
     "authors":[

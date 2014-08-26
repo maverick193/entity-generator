@@ -74,4 +74,29 @@ class Maverick_Generator_Model_Source_Entity_Locale extends Mage_Core_Model_Abst
 
         return $result;
     }
+
+    /**
+     * Get available available locale for shell commands
+     *
+     * @return array
+     */
+    public function optionsForShell()
+    {
+        if (!$this->_shell_options) {
+            $options    = array();
+            $helper     = Mage::helper('maverick_generator');
+            $entities   = Mage::app()->getConfig()->getNode('generator/locale');
+
+            foreach ($entities->children() as $code => $entity) {
+                if (!$entity->label) {
+                    continue;
+                }
+                $options[(string)$code] = $helper->__((string)$entity->label);
+            }
+
+            $this->_shell_options = $options;
+        }
+
+        return $this->_shell_options;
+    }
 }

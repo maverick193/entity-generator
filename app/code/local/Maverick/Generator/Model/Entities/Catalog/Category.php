@@ -153,7 +153,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
                 case 'random' :
                     $parentId = $this->_getRandomParentId();
                     break;
-                case 'configuration' :
+                case 'config' :
                     $parentId = Mage::getStoreConfig('generator/catalog_category/default_parent');
                     break;
                 default :
@@ -202,7 +202,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         $category->save();
 
         // Log category information
-        $result[] = $helper->__('* Category "%s" was successfully created : (ID %s) [Child of "%s"]',
+        $result[] = $helper->__('Category "%s" was successfully created : (ID %s) [Child of "%s"]',
             $category->getName(), $category->getId(), $parentCategory->getName()
         );
 

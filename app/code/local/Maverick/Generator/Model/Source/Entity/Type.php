@@ -78,11 +78,17 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
         return $result;
     }
 
+    /**
+     * Get available entity types for shell commands
+     *
+     * @param bool $class
+     * @return array
+     */
     public function optionsForShell($class = false)
     {
         if (!$this->_shell_options) {
-            $options = array();
-
+            $options    = array();
+            $helper     = Mage::helper('maverick_generator');
             $entities   = Mage::app()->getConfig()->getNode('generator/entities');
 
             foreach ($entities->children() as $entityCode => $entity) {
@@ -91,9 +97,9 @@ class Maverick_Generator_Model_Source_Entity_Type extends Mage_Core_Model_Abstra
                 }
 
                 if ($class) {
-                    $value = Mage::helper('maverick_generator')->__((string)$entity->class);
+                    $value = (string)$entity->class;
                 } else {
-                    $value = Mage::helper('maverick_generator')->__((string)$entity->label);
+                    $value = $helper->__('Create %s Entities', (string)$entity->label);
                 }
 
                 $options[(string)$entityCode] = $value;
