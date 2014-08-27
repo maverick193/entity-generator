@@ -1,93 +1,93 @@
-Maverick-Entity-Generator
+Magento Entity Generator
 =========================
 
-This Magento extension enables you to generate entities for tests :
+This Magento extension uses the library FAKER to generate entities with fake data for tests :
 
-- Generate Customers with fake data using FAKE library
-- Generate orders for registred customers
-    - orders uses randomly Checkmo and banktransfer payment methods
-    - orders uses flaterate_flaterate shipping method
-- Automatically assign created customers to website, store and group
-- Based on payment methods, order invoice and shipment can created
+* Generate customers and their addresses with fake email, address, phone number, ...
+* Automatically assign created customers to website, store and group
+* Generate orders for registred customer using randomly :
+    - Check and Bank Transfer as payment methods
+    - Flat Rate as shipping method
+* Depending on the module configuration in the backend, you can generate invoices and shipments for orders
+* Generate categories and save them as children of :
+    - A random existing category
+    - An existing category specified by user
+    - An existing category configured in System -> Configuration -> Entity Generator in Magento's backend
+* Todo : Generate products (simple, configurable, downloadable, ...)
 
-Requirements
-============
-- This extension uses the PHP library "Faker".
+# I. Requirements
 
-  @see : https://github.com/fzaninotto/Faker
+* Install PHP Composer (see bellow)
+* Enable Check and Bank Transfer payment methods
+* Enable Flat Rate shipping method
+* Allow the use of symlinks in Magento Backend
+To allow the use of symlinks, in your Magento's Backend go to :
 
-- **IMPORTANT !!! To create orders, this extension uses "Check", "Bank Transfer" as payment methods and "Flatrate" as shipping method, please make sure those methods are enabled**
+**_System_** -> _**Configuration**_ -> _**Developer**_ -> _**Template Settings**_ -> "_**Allow Symlinks**_"
 
-Installation
-============
-1. First Install the PHP library FAKE :
----------------------------------------
-* In your Magento root folder, dowload composer by running :
-```curl -sS https://getcomposer.org/installer | php```
+_There no security risk by allowing symlinks in Magento_
 
-* Or, if you don't have curl : 
-```
-php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
-```
-* Or download it manually from : [Composer Website](http://getcomposer.org/download/)
-    
-      
-* Once it is downloaded, create (always in your root folder) a json file called composer.json and put in it the following content :
+# II. Installation
 
-```
+### 1. Install PHP-Composer :
+Download _**composer.phar**_ into your project :
+
+`$ curl -sS https://getcomposer.org/installer | php`
+
+_This will just check a few PHP settings and then download composer.phar to your working directory._
+
+If you are not familiar with composer, please read the composer documentations on [getcomposer](https://getcomposer.org/) website
+
+### 2. Create/Update your root composer.json : 
+
+If you don't have a **_composer.json_** file, create it in your Magento root folder (or outside), otherwise just update yours, you can copy this one :
+
+```json
 {
-    "require":{
-        "fzaninotto/faker" : "*"
+    "name": "Your Project Name",
+    "require": {
+        "maverick/entity-generator": "*",
+        "fzaninotto/faker": "*",
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git://github.com/maverick193/entity-generator.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git://github.com/maverick193/Faker.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git://github.com/magento-hackathon/magento-composer-installer.git"
+        }
+    ],
+    "extra":{
+        "magento-root-dir": "htodcs/"
     }
 }
 ```
-     
-     
-* Finally run : 
 
-  ```php composer.phar install```
-  
-  This will install the latest version of Faker library in a folder named "vendor" in your root directory and will also generate the autoloader automatically
+* _**composer.json** and **composer.phar** should be in the same folder_
+* Update the **_magento-root-dir_** node and specify your Magento root folder "_**web/**_", "_**./**_", ...
+* The _**magento-composer-installer**_ will install the module via symlinks in your Magento folder structure, more information on [magento-composer-installer](https://github.com/magento-hackathon/magento-composer-installer)
+
+### 3. Install Entity Generator via composer : 
+`php composer.phar install`
+
+That should install the extension and its dependencies in a folder named "vendor" and trigger modman to install the extension in your Magento folder structure.
+Finally refresh Magento's cache and configure the extension in System -> Configuration -> Entity Generator
 
 
-2. Install "Entity Generator" extension :
------------------------------------------
+# III. Usage 
 
-* Install it with [modman](https://github.com/colinmollenhour/modman/wiki)
-* Or download and install it manually
+Entities can be generated :
+- From backend (Maverick -> Entity Generator)
+- Via Shell commands (generator.php located in shell folder)
 
-3. Refresh your magento cache : 
--------------------------------
-Log in in your magento Backend and configure the extension
-
-When you generate an entity you can see the generation details in real time :
-``` tail -f var/log/maverick_generator.log ```
-
-Shell Command Line
-==================
-You can also create entities by using Shell Command Line
-
-Examples : 
-
-* Create 100 customers
-
-```
-cd /path/to/magento/
-cd shell/
-php generator.php create --type customer --nbr 100
-```
-
-* Display entities that can be created
-
-```
-php generator.php info
-```
-
-* Show Help
-
-```
-php generator.php help
-```
+All information about how to generate entities can be found on  [Entity Generator Wiki](https://github.com/maverick193/entity-generator/wiki/Magento-Entity-Generator-Wiki)
 
 Compatibility
 =============
