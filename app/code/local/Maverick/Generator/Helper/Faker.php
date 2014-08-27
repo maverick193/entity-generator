@@ -45,21 +45,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
             Mage::registry('faker_locale') :
             Maverick_Generator_Helper_Data::DEFAULT_LOCALE_FAKER;
 
-        $faker      = new Faker\Generator();
-        $providers  = array('Person', 'Address', 'PhoneNumber', 'Company');
-
-        foreach ($providers as $provider) {
-            $class = 'Faker\Provider\\' . $this->_locale . '\\' . $provider;
-            $faker->addProvider(new $class($faker));
-        }
-
-        /* Internet provider */
-        $class = 'Faker\Provider\\' . $this->_locale . '\Internet';
-        if (class_exists($class, false)) {
-            $faker->addProvider(new $class($faker));
-        } else {
-            $faker->addProvider(new Faker\Provider\Internet($faker));
-        }
+        $faker = new Faker\Generator();
 
         /* Lorem Ipsum provider */
         $faker->addProvider(new Faker\Provider\Lorem($faker));
@@ -122,7 +108,7 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     public function generateCategoryData()
     {
         $data = array(
-            'name'              => ucwords($this->_faker->words(rand(1, 2), true)),
+            'name'              => $this->_faker->categoryName(),
             'is_active'         => 1,
             'available_sort_by' => 'position',
             'default_sort_by'   => 'position',
@@ -152,13 +138,39 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     public function addCategoryProviders()
     {
         $categoryProviders = array('ProductCategory');
+        $this->_addProviders($categoryProviders);
 
-        foreach ($categoryProviders as $provider) {
+        return $this;
+    }
+
+    /**
+     * Add customer providers
+     *
+     * @return Maverick_Generator_Helper_Faker
+     */
+    public function addCustomerProviders()
+    {
+        $customerProviders  = array('Person', 'Address', 'PhoneNumber', 'Company', 'Internet');
+        $this->_addProviders($customerProviders);
+
+        return $this;
+    }
+
+    /**
+     * Add providers
+     *
+     * @param array $providers
+     * @return Maverick_Generator_Helper_Faker
+     */
+    protected function _addProviders(array $providers)
+    {
+        foreach ($providers as $provider) {
             $class = 'Faker\Provider\\' . $this->_locale . '\\' . $provider;
-            if (class_exists($class, false)) {
+            try {
                 $this->_faker->addProvider(new $class($this->_faker));
-            } else {
-                $this->_faker->addProvider(new Faker\Provider\ProductCategory($this->_faker));
+            } catch (Exception $e) {
+                $class = 'Faker\Provider\\' . $provider;
+                $this->_faker->addProvider(new $class($this->_faker));
             }
         }
 

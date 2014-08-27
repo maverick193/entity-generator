@@ -38,7 +38,7 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
         $customer       = Mage::getModel('customer/customer');
         $address        = Mage::getModel('customer/address');
         $helper         = Mage::helper('maverick_generator');
-        $fakerHelper    = Mage::helper('maverick_generator/faker');
+        $fakerHelper    = Mage::helper('maverick_generator/faker')->addCustomerProviders();
 
         $result         = array(
                             'entity_type' => $this->getEntityTypeCode(),
@@ -130,11 +130,11 @@ class Maverick_Generator_Model_Entities_Customer implements Maverick_Generator_M
         $customer       = Mage::getModel('customer/customer');
         $address        = Mage::getModel('customer/address');
         $helper         = Mage::helper('maverick_generator');
-        $fakerHelper    = Mage::helper('maverick_generator/faker');
+        $fakerHelper    = Mage::helper('maverick_generator/faker')->addCustomerProviders();
 
-        $customerData = $fakerHelper->generateCustomerData();
-        $i = 0;
-        $result = array();
+        $customerData   = $fakerHelper->generateCustomerData();
+        $i              = 0;
+        $result         = array();
 
         while ($this->emailExists($customer, $customerData['email'])) {
             $customerData['email'] .= $i + 1;
