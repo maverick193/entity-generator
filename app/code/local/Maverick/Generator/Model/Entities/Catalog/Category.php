@@ -26,7 +26,6 @@
  */
 class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Generator_Model_Entities_Interface
 {
-
     /**
      * Generate Magento Entity
      *
@@ -77,7 +76,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
         }
 
         $parentCategory = $this->_initCategory($parentId);
-        $fakerHelper    = Mage::helper('maverick_generator/faker');
+        $fakerHelper    = Mage::helper('maverick_generator/faker')->addCategoryProviders();
 
         $result         = array(
             'entity_type' => $this->getEntityTypeCode(),
@@ -173,7 +172,7 @@ class Maverick_Generator_Model_Entities_Catalog_Category implements Maverick_Gen
 
         $parentCategory = $this->_initCategory($parentId);
 
-        $fakerHelper    = Mage::helper('maverick_generator/faker');
+        $fakerHelper    = Mage::helper('maverick_generator/faker')->addCategoryProviders();
         $categoryData   = $fakerHelper->generateCategoryData();
         $result         = array();
 

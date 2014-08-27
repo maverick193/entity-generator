@@ -73,9 +73,18 @@ class Maverick_Generator_Block_Adminhtml_Container_Form extends Mage_Adminhtml_B
                             'label'     => Mage::helper('maverick_generator')->__('Category Parent'),
                             'title'     => Mage::helper('maverick_generator')->__('Category Parent'),
                             'values'    => array(
-                                            array('label' => Mage::helper('maverick_generator')->__('Random'),           'value' => 'random'),
-                                            array('label' => Mage::helper('maverick_generator')->__('Configured Value'), 'value' => 'configured'),
-                                            array('label' => Mage::helper('maverick_generator')->__('Specific Value'),   'value' => 'fixed'),
+                                            array(
+                                                'label' => Mage::helper('maverick_generator')->__('Random'),
+                                                'value' => 'random'
+                                            ),
+                                            array(
+                                                'label' => Mage::helper('maverick_generator')->__('Configured Value In System -> Configuration'),
+                                                'value' => 'configured'
+                                            ),
+                                            array(
+                                                'label' => Mage::helper('maverick_generator')->__('Specific Value'),
+                                                'value' => 'fixed'
+                                            ),
                             ),
         ));
 

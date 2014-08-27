@@ -145,6 +145,27 @@ class Maverick_Generator_Helper_Faker extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Add catalog category providers
+     *
+     * @return Maverick_Generator_Helper_Faker
+     */
+    public function addCategoryProviders()
+    {
+        $categoryProviders = array('ProductCategory');
+
+        foreach ($categoryProviders as $provider) {
+            $class = 'Faker\Provider\\' . $this->_locale . '\\' . $provider;
+            if (class_exists($class, false)) {
+                $this->_faker->addProvider(new $class($this->_faker));
+            } else {
+                $this->_faker->addProvider(new Faker\Provider\ProductCategory($this->_faker));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Fetch a random region_id and region_name value
      *
      * @return array
